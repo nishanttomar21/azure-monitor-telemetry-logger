@@ -9,6 +9,47 @@ This Python application demonstrates how to integrate and send logs, traces, and
 - **Custom metrics** for request counts and processing time
 - **Manual Azure Monitor setup** with INFO log level support
 
+## Application Insight Logs Screenshot
+
+![App UI Screenshot](/assets/screenshot.png)
+
+## Flow Architecture
+
+```mermaid
+flowchart TD
+A["Start: Initialize Application Insights Logger"] --> B{"Connection String Provided?"}
+B -- No --> Z["Raise Error: Connection String Not Found"]
+B -- Yes --> C["Setup Azure Monitor"]
+C --> D["Setup Custom Logging"]
+D --> E["Setup Tracer"]
+E --> F["Setup Metrics"]
+F --> G["Logger Ready"]
+G --> H["Send Startup Log"]
+H --> I["Log Info: Application Started"]
+I --> J["User Authentication Span"]
+J --> J1["Set Span Attributes"]
+J1 --> J2["Log Info: Auth Started"]
+J2 --> J3["Simulate Work"]
+J3 --> J4["Increment Counter"]
+J4 --> J5["Record Processing Time"]
+J5 --> J6["Log Info: Auth Completed"]
+J6 --> K["Data Processing Span"]
+K --> K1["Set Parent Span Attributes"]
+K1 --> K2["Data Validation Span"]
+K2 --> K3["Set Validation Attributes"]
+K3 --> K4["Log Info: Validation Started"]
+K4 --> K5["Data Transformation Span"]
+K5 --> K6["Set Transformation Attributes"]
+K6 --> K7["Log Warning: Transformation Issues"]
+K7 --> L["Error Handling"]
+L --> L1{"Division by Zero?"}
+L1 -- Yes --> L2["Log Error: Division Error"]
+L1 -- No --> M["Continue"]
+L2 --> M["Continue"]
+M --> N["Log Info: Workflow Completed"]
+N --> O["End: Logs and Traces Sent"]
+```
+
 ## Prerequisites
 
 - Python 3.7 or newer
@@ -29,10 +70,6 @@ This Python application demonstrates how to integrate and send logs, traces, and
     ```
    python app_insights_logger.py
    ```
-
-## Application Insight Logs Screenshot
-
-![App UI Screenshot](/assets/screenshot.png)
 
 
 ## Usage
